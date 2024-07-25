@@ -1,10 +1,27 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import "./style.css"
-// import img from 'https://w7.pngwing.com/pngs/551/108/png-transparent-arrow-illustration-arrow-icon-right-arrow-angle-web-design-internet-thumbnail.png'
 
 const Main = () => {
     const[items,setItems]=  useState([])
+    const[theme,setTheme]=  useState("light")
+    const[mode,setMode]= useState("Dark Mode")
+    const[modec,setModec]=useState("black")
+    const[modet,setModet]=useState("white")
+   
+
+    const themeStyles={
+        light:{
+            backgroundColor: "white",
+            color: "black",
+        },
+        dark:{
+            backgroundColor: "black",
+            color: "white",
+        }
+    }
+    
+   
 
     useEffect(()=>{
         axios.get("https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood")
@@ -16,10 +33,17 @@ const Main = () => {
         })
     },[])
 
+    const toggleTheme = () => {
+        setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+        setMode((md)=> (md === 'Dark Mode' ? 'Light Mode' : 'Dark Mode') );
+        setModec((md)=> (md === 'black' ? 'white' : 'black') );
+        setModet((md)=> (md === 'white' ? 'black' : 'white') );
+      };
+
     const itemsList = items.map(({strMeal,strMealThumb,idMeal})=>{
         return <>
        
-        <section className="card">
+        <section className="card" style={{...themeStyles[theme],transition:'all 1s ease'}}>
             <img src={strMealThumb} alt={idMeal} />
             <section className="content">
                 <p>{strMeal} </p>
@@ -29,10 +53,14 @@ const Main = () => {
         </>
     })
 
-  return <div className="items-container">
-    {itemsList}
-    
+
+
+  return <div className="items-container" style={{...themeStyles[theme],transition:'all 1s ease'}} >
+    {itemsList}  
+    <button onClick={toggleTheme} style={{backgroundColor:modec,color:modet,boxShadow:`1px 2px 10px ${modec}`}} >{mode} </button>
   </div>
+  
+ 
 }
 
 export default Main
